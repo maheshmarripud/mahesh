@@ -1,0 +1,203 @@
+﻿<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src="~/DatePicker/js/datepicker.js"></script>
+
+@model maheshtest.Models.STATEMASTER
+@using System.Web.Mvc.Html;
+
+@{
+    ViewBag.Title = "Product Master HTML";
+}
+   
+    @Html.HiddenFor(m=>m.TNO)
+    <div class="container">
+        <div class="row" style="padding-top:50px;padding-left:50px">
+           
+                <div class="form-group row">
+                    <label for="" class="col-sm-2 col-form-label">Employee Name</label>
+                    <input type="text" id="EmployeeName" class="form-group"> 
+                </div>
+
+                <div class="form-group row">
+                    <label for="" class="col-sm-2 col-form-label">Date of Birth</label>
+                    <input id="DOB" class='datepicker' size='11' title='D-MMM-YYYY'/>
+
+                </div>
+
+                <div class="form-group row">
+                    <label for="" class="col-sm-2 col-form-label">Department</label>
+                    @*@Html.TextBoxFor(m=>m.Department)<br/>*@
+                    <select id="Department" class="form-control">
+                        <option value="volvo">Volvo</option>
+                        <option value="saab">Saab</option>
+                        <option value="mercedes">Mercedes</option>
+                        <option value="audi">Audi</option>
+                    </select>
+                </div>
+
+                <div class="form-group row" >
+                    <label for="" class="col-sm-2 col-form-label">Reporting Manager</label>
+                    <input type="text" id="ReportingManger" class="form-control">
+                </div>
+
+                <div class="container" >
+
+                    <form class="form-inline">
+                                                       
+                        <div class="form-group mr-2">
+                            <label class="form-group" for="inputEmail"  style="padding-right:60px;">I am not Robot</label> 
+                            <input type="text" class="form-control" id="val1">
+                            <span class="form-group">+</span>
+                        </div>
+                                                                    
+                        <div class="form-group mr-2">
+                            <input type="text" class="form-control" id="val2">
+                        </div>
+                        
+                        <div class="form-group mr-2">
+                            <input type="text" class="form-control" id="total" placeholder="Enter the sum of two values">
+                        
+                       </div>
+                       <button type="button" class="btn btn-primary" onclick="verify();">Verify</button>
+                        <input type="button" id="testPostMethod" class="btn btn-success" value="Insert" onclick="sumbmit();" />
+                </form>
+               </div>
+           
+        </div>
+           
+            
+          </div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#val1").val(randomNumberFromRange(1, 9));
+        $("#val2").val(randomNumberFromRange(1, 9));
+        
+        $("#testPostMethod").hide();
+        
+
+    function randomNumberFromRange(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+
+    });
+    function verify() {
+        debugger
+        var num1 = $("#val1").val();
+        var num2 = $("#val2").val();
+        var total = $("#total").val();
+        if(total === null){
+            alert("Total field should not be blank");
+        }
+        var total1 = +num1 + +num2;
+        if (+total1 === +total) {
+            $("#testPostMethod").show();
+            $("#message").html("<p color=red>Verification Success</p>")
+           // alert("Verification Success");
+        } else {
+            alert("Verification Failed");
+        }
+
+
+    }
+
+    function sumbmit() {
+        debugger
+        var Employee = $("#EmployeeName").val();
+        //alert(Employee)
+        var D = $("#DOB").val();
+        var dept = $("#Department").val();;
+        var report = $("#ReportingManger").val();
+        var robort = $("#total").val();
+
+        var STATEMASTER = {
+            TNO: 1,
+            EmployeeName: Employee,
+            DOB: D,
+            Department: dept,
+            ReportingManger: report,
+            IamnotaRobort: robort
+        }
+        debugger
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:59257/api/abc',
+            data: JSON.stringify(STATEMASTER),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                location.reload();
+                alert(data);
+            }
+        });
+
+    }
+
+    
+
+
+    //function sumbmit() {
+    //    debugger
+    //   // var T = $("#TNO").val();
+    //    var Employee = $("#EmployeeName").val();
+    //    alert(Employee)
+    //    var D = $("#DOB").val();
+    //    var dept = $("#Department").val();;
+    //    var report = $("#ReportingManger").val();
+    //    var robort = $("#IamnotaRobort").val();
+
+    //    var STATEMASTER = {
+    //        TNO: 1,
+    //        EmployeeName: Employee,
+    //        DOB: D,
+    //        Department: dept,
+    //        ReportingManger: report,
+    //        IamnotaRobort: robort
+    //    }
+
+
+    //     $('#testPostMethod').bind("click", GeneralPost);
+    //function GeneralPost() {
+    //    $.ajax({
+    //        type: 'POST',
+    //        url: 'http://localhost:59257/api/abc',
+
+    //        //url: '/api/NewRecipe',
+    //        data: JSON.stringify(STATEMASTER),
+    //        contentType: 'application/json; charset=utf-8',
+    //        dataType: 'json'
+    //    });
+    //}
+
+
+
+
+    //    $.ajax({
+    //        url: 'http://localhost:59257/api/abc',
+    //        data: JSON.stringify(STATEMASTER),
+    //        type: "POST",
+    //        contentType: "application/json;charset=utf-8",
+    //        dataType: "json",
+    //        success: function (data) {
+    //            alert("Success");
+
+    //      $("#div1").html(data);
+    //        }
+    //    });
+  //)
+
+
+
+    //////Testing 
+
+    //var dataJSON = "test";
+
+
+
+    
+
+</script>
